@@ -37,6 +37,18 @@ type all_trophies struct {
 		} `json:"comparedUser"`
 	} `json:"trophies"`
 }
+type all_trophies_data struct {
+	Trophies []struct {
+		TrophyId         int    `json:"trophyId"`
+		TrophyHidden     bool   `json:"trophyHidden"`
+		TrophyType       string `json:"trophyType"`
+		TrophyName       string `json:"trophyName"`
+		TrophyDetail     string `json:"trophyDetail"`
+		TrophyIconUrl    string `json:"trophyIconUrl"`
+		TrophyRare       int    `json:"TrophyRare"`
+		TrophyEarnedRate string `json:"trophyEarnedRate"`
+	} `json:"trophies"`
+}
 type trophie_groups struct {
 	TrophyTitleName     string `json:"trophyTitleName"`
 	TrophyTitleDetail   string `json:"trophyTitleDetail"`
@@ -159,4 +171,37 @@ func GetGameTrophieGroups(oauth oauth_response, npCommunicationId string) (troph
 		return trophie_groups{}, err
 	}
 	return groups, nil
+}
+func GetGameTrophieData(oauth oauth_response, npCommunicationId string, groupId string) (all_trophies_data, error) {
+	client := &http.Client{}
+	var url string
+	//var Url *url.URL
+	//Url, err := url.Parse(TROPHY_ENDPOINT)
+	url = TROPHY_ENDPOINT + "trophyTitles/" + npCommunicationId + "/trophyGroups/" + groupId + "/trophies?fields=%40default,trophyRare,trophyEarnedRate&npLanguage=en"
+	req, _ := http.NewRequest("GET", url, nil)
+	req.Header.Set("Authorization", "Bearer "+oauth.AccessToken)
+	resp, err := client.Do(req)
+
+	if err != nil {
+		return all_trophies_data{}, err
+	}
+	defer resp.Body.Close()
+	//body, _ := ioutil.ReadAll(resp.Body)
+	//	fmt.Println(string(body))
+	if resp.StatusCode != http.StatusOK {
+		var api_error user_error
+		err := json.NewDecoder(resp.Body).Decode(&api_error)
+		if err != nil {
+			return all_trophies_data{}, err
+		}
+		return all_trophies_data{}, fmt.Errorf(api_error.Error.Message)
+	}
+
+	var trophies all_trophies_data
+	err = json.NewDecoder(resp.Body).Decode(&trophies)
+
+	if err != nil {
+		return all_trophies_data{}, err
+	}
+	return trophies, nil
 }

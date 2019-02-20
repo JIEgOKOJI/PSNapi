@@ -33,8 +33,9 @@ func main() {
 			fmt.Println(trophie.TrophyName)
 		}
 	}*/
-	groups, err := handlers.GetGameTrophieGroups(oauth, "NPWR16409_00")
-	fmt.Println(groups)
-	//fmt.Println(alltrophies)
+	//groups, err := handlers.GetGameTrophieGroups(oauth, "NPWR16409_00")
+	//fmt.Println(groups)
+	alltrophies, err := handlers.GetGameTrophieData(oauth, "NPWR16409_00", "default")
+	fmt.Println(alltrophies)
 
 }
