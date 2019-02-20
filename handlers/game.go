@@ -37,10 +37,34 @@ type all_trophies struct {
 		} `json:"comparedUser"`
 	} `json:"trophies"`
 }
+type trophie_groups struct {
+	TrophyTitleName     string `json:"trophyTitleName"`
+	TrophyTitleDetail   string `json:"trophyTitleDetail"`
+	TrophyTitleIconUrl  string `json:"trophyTitleIconUrl"`
+	TrophyTitlePlatfrom string `json:"trophyTitlePlatfrom"`
+	DefinedTrophies     struct {
+		Bronze   int `json:"bronze"`
+		Silver   int `json:"silver"`
+		Gold     int `json:"gold"`
+		Platinum int `json:"platinum"`
+	} `json:"definedTrophies"`
+	TrophyGroups []struct {
+		TrophyGroupId      string `json:"trophyGroupId"`
+		TrophyGroupName    string `json:"trophyGroupName"`
+		TrophyGroupDetail  string `json:"trophyType"`
+		TrophyGroupIconUrl string `json:"trophyGroupDetail"`
+		DefinedTrophies    struct {
+			Bronze   int `json:"bronze"`
+			Silver   int `json:"silver"`
+			Gold     int `json:"gold"`
+			Platinum int `json:"platinum"`
+		} `json:"definedTrophies"`
+	} `json:"trophyGroups"`
+}
 
 func GetGameTrophieTitles(oauth oauth_response, TitleId string) (trophy_titles, error) {
 	client := &http.Client{}
-	url := TROPHY_ENDPOINT + "apps/trophyTitles" + "?npTitleIds=" + TitleId + "&fields=@default&npLanguage=en"
+	url := TROPHY_ENDPOINT + "apps/trophyTitles" + "?npTitleIds=" + TitleId + "&fields=%40default&npLanguage=en"
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Authorization", "Bearer "+oauth.AccessToken)
 	resp, err := client.Do(req)
@@ -72,18 +96,10 @@ func GetGameTrophies(oauth oauth_response, npCommunicationId string, comparedUse
 	//var Url *url.URL
 	//Url, err := url.Parse(TROPHY_ENDPOINT)
 	if comparedUser == "" {
-		url = TROPHY_ENDPOINT + "trophyTitles/" + npCommunicationId + "/trophyGroups/all/trophies?fileds=@default,trophyRare,trophyEarnedRate,hasTrophyGroups,trophySmallIconUrl&iconSize=m&visibleType=1&npLanguage=en"
+		url = TROPHY_ENDPOINT + "trophyTitles/" + npCommunicationId + "/trophyGroups/all/trophies?fileds=%40default,trophyRare,trophyEarnedRate,hasTrophyGroups,trophySmallIconUrl&iconSize=m&visibleType=1&npLanguage=en"
 	} else {
-		url = TROPHY_ENDPOINT + "trophyTitles/" + npCommunicationId + "/trophyGroups/all/trophies?fileds=@default,trophyRare,trophyEarnedRate,hasTrophyGroups,trophySmallIconUrl&iconSize=m&visibleType=1&npLanguage=en&comparedUser=" + comparedUser
+		url = TROPHY_ENDPOINT + "trophyTitles/" + npCommunicationId + "/trophyGroups/all/trophies?fileds=%40default,trophyRare,trophyEarnedRate,hasTrophyGroups,trophySmallIconUrl&iconSize=m&visibleType=1&npLanguage=en&comparedUser=" + comparedUser
 	}
-
-	/*parameters := url.Values{}
-	//parameters.Add("fields", "@default,trophyRare,trophyEarnedRate,hasTrophyGroups,trophySmallIconUrl'")
-	parameters.Add("iconSize", "m")
-	parameters.Add("visibleType", "1")
-	parameters.Add("npLanguage", "en")
-	Url.RawQuery = parameters.Encode()
-	fmt.Printf("Encoded URL is %q\n", Url.String())*/
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Authorization", "Bearer "+oauth.AccessToken)
 	resp, err := client.Do(req)
@@ -110,4 +126,37 @@ func GetGameTrophies(oauth oauth_response, npCommunicationId string, comparedUse
 		return all_trophies{}, err
 	}
 	return alltrophies, nil
+}
+func GetGameTrophieGroups(oauth oauth_response, npCommunicationId string) (trophie_groups, error) {
+	client := &http.Client{}
+	var url string
+	//var Url *url.URL
+	//Url, err := url.Parse(TROPHY_ENDPOINT)
+	url = TROPHY_ENDPOINT + "trophyTitles/" + npCommunicationId + "/trophyGroups/?npLanguage=en"
+	req, _ := http.NewRequest("GET", url, nil)
+	req.Header.Set("Authorization", "Bearer "+oauth.AccessToken)
+	resp, err := client.Do(req)
+
+	if err != nil {
+		return trophie_groups{}, err
+	}
+	defer resp.Body.Close()
+	//body, _ := ioutil.ReadAll(resp.Body)
+	//fmt.Println(string(body))
+	if resp.StatusCode != http.StatusOK {
+		var api_error user_error
+		err := json.NewDecoder(resp.Body).Decode(&api_error)
+		if err != nil {
+			return trophie_groups{}, err
+		}
+		return trophie_groups{}, fmt.Errorf(api_error.Error.Message)
+	}
+
+	var groups trophie_groups
+	err = json.NewDecoder(resp.Body).Decode(&groups)
+
+	if err != nil {
+		return trophie_groups{}, err
+	}
+	return groups, nil
 }
