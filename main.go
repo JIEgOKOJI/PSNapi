@@ -19,7 +19,9 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(profile)
-	handlers.UserAddFriend(oauth, "ledokol322", "jiegokoji", "test msg")
+	//	handlers.UserAddFriend(oauth, "ledokol322", "jiegokoji", "test msg")
+	threads, _ := handlers.MessageThreads(oauth, "jiegokoji")
+	fmt.Println(threads)
 	/*games, err := handlers.UserGames(oauth, "jiegokoji")
 	for _, title := range games.Titles {
 		fmt.Println(title.TitleId)

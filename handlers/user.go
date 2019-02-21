@@ -24,7 +24,7 @@ type user_games struct {
 		TitleId string `json:"titleId"`
 		Name    string `json:"name"`
 		Image   string `json:"image"`
-	}
+	} `json:"titles"`
 }
 type user_profile struct {
 	Profile struct {
