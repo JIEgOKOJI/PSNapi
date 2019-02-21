@@ -32,8 +32,9 @@ type all_trophies struct {
 		TrophyDetail  string `json:"trophyDetail"`
 		TrophyIconUrl string `json:"trophyIconUrl"`
 		ComparedUser  struct {
-			OnlineId string `json:"onlineId"`
-			Earned   bool   `json:"earned"`
+			OnlineId   string `json:"onlineId"`
+			Earned     bool   `json:"earned"`
+			EarnedDate string `json:"earnedDate"`
 		} `json:"comparedUser"`
 	} `json:"trophies"`
 }

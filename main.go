@@ -27,15 +27,15 @@ func main() {
 	}*/
 	//trophyTitles, err := handlers.GetGameTrophieTitles(oauth, "CUSA12448_00")
 	//fmt.Println(trophyTitles.Apps[0].TrophyTitles[0].NpCommunicationId)
-	/*alltrophies, err := handlers.GetGameTrophies(oauth, "NPWR16409_00", "jiegokoji")
-	for _, trophie := range alltrophies.Trophies {
+	alltrophies, err := handlers.GetGameTrophies(oauth, "NPWR16409_00", "jiegokoji")
+	/*for _, trophie := range alltrophies.Trophies {
 		if trophie.ComparedUser.OnlineId != "" && trophie.ComparedUser.Earned == true {
 			fmt.Println(trophie.TrophyName)
 		}
-	}*/
-	//groups, err := handlers.GetGameTrophieGroups(oauth, "NPWR16409_00")
-	//fmt.Println(groups)
-	alltrophies, err := handlers.GetGameTrophieData(oauth, "NPWR16409_00", "default")
+	}
+	groups, err := handlers.GetGameTrophieGroups(oauth, "NPWR16409_00")
+	fmt.Println(groups)
+	alltrophies, err := handlers.GetGameTrophieData(oauth, "NPWR16409_00", "default")*/
 	fmt.Println(alltrophies)
 
 }
