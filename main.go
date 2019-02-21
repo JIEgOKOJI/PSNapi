@@ -19,6 +19,7 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(profile)
+	handlers.UserAddFriend(oauth, "ledokol322", "jiegokoji", "test msg")
 	/*games, err := handlers.UserGames(oauth, "jiegokoji")
 	for _, title := range games.Titles {
 		fmt.Println(title.TitleId)
@@ -27,7 +28,7 @@ func main() {
 	}*/
 	//trophyTitles, err := handlers.GetGameTrophieTitles(oauth, "CUSA12448_00")
 	//fmt.Println(trophyTitles.Apps[0].TrophyTitles[0].NpCommunicationId)
-	alltrophies, err := handlers.GetGameTrophies(oauth, "NPWR16409_00", "jiegokoji")
+	//alltrophies, err := handlers.GetGameTrophies(oauth, "NPWR16409_00", "jiegokoji")
 	/*for _, trophie := range alltrophies.Trophies {
 		if trophie.ComparedUser.OnlineId != "" && trophie.ComparedUser.Earned == true {
 			fmt.Println(trophie.TrophyName)
@@ -36,6 +37,6 @@ func main() {
 	groups, err := handlers.GetGameTrophieGroups(oauth, "NPWR16409_00")
 	fmt.Println(groups)
 	alltrophies, err := handlers.GetGameTrophieData(oauth, "NPWR16409_00", "default")*/
-	fmt.Println(alltrophies)
+	//fmt.Println(alltrophies)
 
 }

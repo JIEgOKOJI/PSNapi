@@ -2,9 +2,10 @@ package handlers
 
 import (
 	//"PSNapi/handlers/auth"
+	"bytes"
 	"encoding/json"
 	"fmt"
-	//	"io/ioutil"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 )
@@ -138,4 +139,21 @@ func UserGames(oauth oauth_response, UserName string) (user_games, error) {
 		return user_games{}, err
 	}
 	return games, nil
+}
+func UserAddFriend(oauth oauth_response, LoggedPsn string, UserName string, msg string) error {
+	client := &http.Client{}
+	url := USERS_URL + LoggedPsn + "/friendList/" + UserName
+	var jsonStr = []byte(`{"requestMessage":"` + msg + `"}`)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	req.Header.Set("Authorization", "Bearer "+oauth.AccessToken)
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := client.Do(req)
+
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println(string(body))
+	return nil
 }
