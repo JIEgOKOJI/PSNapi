@@ -23,6 +23,7 @@ func main() {
 	//threads, _ := handlers.MessageThreads(oauth, "jiegokoji")
 	threadInfo, err := handlers.MessageThreadInfo(oauth, "~1492BCCAACF017DE.3003C1AB75ABBEF0")
 	fmt.Println(threadInfo, err)
+	handlers.MessageAttachment(oauth, "https://us-gmsgp.np.community.playstation.net/groupMessaging/resources/eae1492BCCAACF017DE.3003C1AB75ABBEF0/event/396999437288953/1550779051909", "newAttachment")
 	//fmt.Println(threads)
 	/*games, err := handlers.UserGames(oauth, "jiegokoji")
 	for _, title := range games.Titles {

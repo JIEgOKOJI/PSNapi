@@ -5,7 +5,7 @@ import (
 	//	"bytes"
 	"encoding/json"
 	"fmt"
-	//"io/ioutil"
+	"io/ioutil"
 	"net/http"
 	//	"net/url"
 )
@@ -131,4 +131,32 @@ func MessageThreadInfo(oauth oauth_response, threadId string) (thread_Info, erro
 		return thread_Info{}, err
 	}
 	return threadInfo, nil
+}
+func MessageAttachment(oauth oauth_response, attachmentUrl string, pathName string) (string, error) {
+	client := &http.Client{}
+	var url string
+	var savedPath string = ""
+	url = attachmentUrl
+	req, _ := http.NewRequest("GET", url, nil)
+	req.Header.Set("Authorization", "Bearer "+oauth.AccessToken)
+	resp, err := client.Do(req)
+
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	fmt.Println(resp.Header["Content-Type"][0])
+	switch resp.Header["Content-Type"][0] {
+	case "image/jpeg":
+		body, _ := ioutil.ReadAll(resp.Body)
+		err := ioutil.WriteFile(pathName+".jpg", body, 0644)
+		if err != nil {
+			fmt.Println(err)
+			return "", err
+		}
+		savedPath = pathName + ".jpg"
+	default:
+
+	}
+	return savedPath, nil
 }
