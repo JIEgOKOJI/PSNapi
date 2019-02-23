@@ -101,7 +101,7 @@ func UserInfo(oauth oauth_response, UserName string) (user_profile, error) {
 
 	return profile, nil
 }
-func UserGames(oauth oauth_response, UserName string) (user_games, error) {
+func UserGames(oauth oauth_response, UserName string, limit string, offset string) (user_games, error) {
 	client := &http.Client{}
 	var Url *url.URL
 	Url, err := url.Parse(GAME_ENDPOINT)
@@ -110,11 +110,14 @@ func UserGames(oauth oauth_response, UserName string) (user_games, error) {
 	parameters.Add("type", "played")
 	parameters.Add("app", "richProfile")
 	parameters.Add("sort", "-lastPlayedDate")
-	parameters.Add("limit", "100")
+	parameters.Add("limit", limit)
+	parameters.Add("offset", offset)
 	parameters.Add("iw", "240")
 	parameters.Add("ih", "240")
 	Url.RawQuery = parameters.Encode()
 	fmt.Printf("Encoded URL is %q\n", Url.String())
+	//uri := GAME_ENDPOINT + "users/" + UserName + "/titles?app=richProfile&ih=240&iw=240&limit=" + limit + "&offset=" + offset + "&sort=-lastPlayedDate&type=played"
+	//	fmt.Println(uri)
 	req, _ := http.NewRequest("GET", Url.String(), nil)
 	req.Header.Set("Authorization", "Bearer "+oauth.AccessToken)
 	resp, err := client.Do(req)
@@ -123,6 +126,8 @@ func UserGames(oauth oauth_response, UserName string) (user_games, error) {
 		return user_games{}, err
 	}
 	defer resp.Body.Close()
+	//body, _ := ioutil.ReadAll(resp.Body)
+	//fmt.Println(string(body))
 	if resp.StatusCode != http.StatusOK {
 		var api_error user_error
 		err := json.NewDecoder(resp.Body).Decode(&api_error)
