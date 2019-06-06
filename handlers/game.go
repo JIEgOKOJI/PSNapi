@@ -4,7 +4,8 @@ import (
 	//"PSNapi/handlers/auth"
 	"encoding/json"
 	"fmt"
-	//"io/ioutil"
+
+	//	"io/ioutil"
 	"net/http"
 	//	"net/url"
 )
@@ -31,6 +32,7 @@ type all_trophies struct {
 		TrophyName    string `json:"trophyName"`
 		TrophyDetail  string `json:"trophyDetail"`
 		TrophyIconUrl string `json:"trophyIconUrl"`
+		TrophyRare    int    `json:"TrophyRare"`
 		ComparedUser  struct {
 			OnlineId   string `json:"onlineId"`
 			Earned     bool   `json:"earned"`
@@ -188,7 +190,8 @@ func GetGameTrophieData(oauth oauth_response, npCommunicationId string, groupId 
 	}
 	defer resp.Body.Close()
 	//body, _ := ioutil.ReadAll(resp.Body)
-	//	fmt.Println(string(body))
+
+	//fmt.Println(string(body))
 	if resp.StatusCode != http.StatusOK {
 		var api_error user_error
 		err := json.NewDecoder(resp.Body).Decode(&api_error)

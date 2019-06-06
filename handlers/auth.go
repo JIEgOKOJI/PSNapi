@@ -164,6 +164,8 @@ func a2fact(refresh_token string) (oauth_response, error) {
 	}
 
 	var oa oauth_response
+	//body, _ := ioutil.ReadAll(resp.Body)
+	//	fmt.Println(string(body))
 	err = json.NewDecoder(resp.Body).Decode(&oa)
 	defer resp.Body.Close()
 

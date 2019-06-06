@@ -17,14 +17,34 @@ type user_error struct {
 	} `json:"error"`
 }
 type user_games struct {
-	Start        int `json:"start"`
-	Size         int `json:"size"`
 	TotalResults int `json:"totalResults"`
-	Titles       []struct {
-		TitleId string `json:"titleId"`
-		Name    string `json:"name"`
-		Image   string `json:"image"`
-	} `json:"titles"`
+	Offset       int `json:"offset"`
+	Limit        int `json:"limit"`
+	TrophyTitles []struct {
+		NpCommunicationId   string `json:"npCommunicationId"`
+		TrophyTitleName     string `json:"trophyTitleName"`
+		TrophyTitleDetail   string `json:"trophyTitleDetail"`
+		TrophyTitleIconUrl  string `json:"trophyTitleIconUrl"`
+		TrophyTitlePlatfrom string `json:"trophyTitlePlatfrom"`
+		HasTrophyGroups     bool   `json:"hasTrophyGroups"`
+		DefinedTrophies     struct {
+			Platinum int `json:"platinum"`
+			Gold     int `json:"gold"`
+			Silver   int `json:"silver"`
+			Bronze   int `json:"bronze"`
+		} `json:"definedTrophies"`
+		ComparedUser struct {
+			OnlineId       string `json:"onlineId"`
+			Progress       int    `json:"progress"`
+			EarnedTrophies struct {
+				Platinum int `json:"platinum"`
+				Gold     int `json:"gold"`
+				Silver   int `json:"silver"`
+				Bronze   int `json:"bronze"`
+			} `json:"earnedTrophies"`
+			LastUpdateDate string `json:"lastUpdateDate"`
+		} `json:"comparedUser"`
+	} `json:"trophyTitles"`
 }
 type user_profile struct {
 	Profile struct {
@@ -105,18 +125,22 @@ func UserGames(oauth oauth_response, UserName string, limit string, offset strin
 	client := &http.Client{}
 	var Url *url.URL
 	Url, err := url.Parse(GAME_ENDPOINT)
-	Url.Path += "users/" + UserName + "/titles"
+	//Url.Path += "users/" + UserName + "/titles"
 	parameters := url.Values{}
-	parameters.Add("type", "played")
+	//parameters.Add("type", "played")
+	parameters.Add("fields", "@default")
 	parameters.Add("app", "richProfile")
+	parameters.Add("platform", "PS3,PS4,PSVITA")
+	parameters.Add("npLanguage", "en")
 	parameters.Add("sort", "-lastPlayedDate")
 	parameters.Add("limit", limit)
 	parameters.Add("offset", offset)
 	parameters.Add("iw", "240")
 	parameters.Add("ih", "240")
+	parameters.Add("comparedUser", UserName)
 	Url.RawQuery = parameters.Encode()
 	fmt.Printf("Encoded URL is %q\n", Url.String())
-	//uri := GAME_ENDPOINT + "users/" + UserName + "/titles?app=richProfile&ih=240&iw=240&limit=" + limit + "&offset=" + offset + "&sort=-lastPlayedDate&type=played"
+	//uri := GAME_ENDPOINT + "users/" + UserName + "/titles?app=richProfile&ih=240&iw=240&limit=" + limit + "&offset=" + offset + "&platform=PS3%2CPSVITA%2CPS4&sort=-lastPlayedDate&type=played"
 	//	fmt.Println(uri)
 	req, _ := http.NewRequest("GET", Url.String(), nil)
 	req.Header.Set("Authorization", "Bearer "+oauth.AccessToken)
