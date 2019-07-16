@@ -37,10 +37,10 @@ func main() {
 	//fmt.Println(threadInfo, err)
 	//handlers.MessageAttachment(oauth, "https://us-gmsgp.np.community.playstation.net/groupMessaging/resources/eae1492BCCAACF017DE.3003C1AB75ABBEF0/event/397041907835503/1550944952482", "newAttachment2")
 	//fmt.Println(threads)*/
-	games, err := handlers.UserGames(oauth, "jiegokoji", "1", "0")
+	//games, err := handlers.UserGames(oauth, "jiegokoji", "1", "0")
 	//total := games.TotalResults
 	//offset := 0
-	fmt.Println(games)
+	//fmt.Println(games)
 	/*for total > 100 {
 		fmt.Println("request for :", 100, " offset: ", offset)
 		handlers.UserGames(oauth, "jiegokoji", "100", strconv.Itoa(offset))
@@ -67,7 +67,7 @@ func main() {
 		return
 	}*/
 
-	alltrophies, err := handlers.GetGameTrophies(oauth, "NPWR07862_00", "jiegokoji")
+	alltrophies, err := handlers.GetGameTrophies(oauth, "NPWR01580_00", "jiegokoji")
 	fmt.Println(alltrophies)
 
 	//for _, trophie := range alltrophies.Trophies {

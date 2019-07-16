@@ -180,7 +180,7 @@ func GetGameTrophieData(oauth oauth_response, npCommunicationId string, groupId 
 	var url string
 	//var Url *url.URL
 	//Url, err := url.Parse(TROPHY_ENDPOINT)
-	url = TROPHY_ENDPOINT + "trophyTitles/" + npCommunicationId + "/trophyGroups/" + groupId + "/trophies?fields=%40default,trophyRare,trophyEarnedRate&npLanguage=en"
+	url = TROPHY_ENDPOINT + "trophyTitles/" + npCommunicationId + "/trophyGroups/all/trophies?fields=%40default,trophyRare,trophyEarnedRate&npLanguage=en"
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Authorization", "Bearer "+oauth.AccessToken)
 	resp, err := client.Do(req)
